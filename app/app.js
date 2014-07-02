@@ -71,7 +71,7 @@ $r.Application("profileWebsite", function(){
         }
         else
         {
-            location.hash = "#resume";
+            location.hash = "#myresume";
             this.currentState = "resume";
         }
     }
