@@ -70,7 +70,7 @@ body {
   height: 100%;
   visibility: hidden;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #e0e0e0;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -81,17 +81,13 @@ body {
   -moz-transform-style: preserve-3d;
   transform-style: preserve-3d; }
 
-.section.active {
+.section-active {
   visibility: visible;
   z-index: 1; }
 
-.section-scaleDown {
-  -webkit-animation: scaleDown 0.7s ease both;
-  animation: scaleDown 0.7s ease both; }
-
-.section-moveFromRight {
-  -webkit-animation: moveFromRight 0.6s ease both;
-  animation: moveFromRight 0.6s ease both; }
+.section.active {
+  visibility: visible;
+  z-index: 1; }
 
 .section-ontop {
   z-index: 999; }
@@ -102,3 +98,35 @@ body {
   color: #009688;
   font-family: RobotoDraft;
   font-weight: 400; }
+
+/********************************* animations **************************************/
+.section-scaleDown {
+  -webkit-animation: scaleDown 0.7s ease both;
+  animation: scaleDown 0.7s ease both; }
+
+.section-moveFromRight {
+  -webkit-animation: moveFromRight 0.6s ease both;
+  animation: moveFromRight 0.6s ease both; }
+
+/********************************* keyframes **************************************/
+@-webkit-keyframes scaleDown {
+
+  to {
+    opacity: 0;
+    -webkit-transform: scale(0.8); } }
+
+@keyframes scaleDown {
+
+  to {
+    opacity: 0;
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8); } }
+
+@-webkit-keyframes moveFromRight {
+  from {
+    -webkit-transform: translateX(100%); } }
+
+@keyframes moveFromRight {
+  from {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%); } }
