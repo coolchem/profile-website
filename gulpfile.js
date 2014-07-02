@@ -4,35 +4,52 @@ var gulp    = require('gulp'),
         refresh = require('gulp-livereload'),
         server  = require('tiny-lr')();
 
+var paths = {
+    scripts:['app/**/*.js'],
+    css:['app/**/*.css'],
+    json:['app/**/*.json'],
+    html:['app/**/*.html'],
+};
+
 gulp.task('expressServer', function(){
     app = express();
     app.use(require('connect-livereload')());
-    app.use(express.static('src/'));
+    app.use(express.static(__dirname));
     app.listen(4000);
 });
 
 gulp.task('html', function(){
-    gulp.src('src/**/*.html')
+    gulp.src(paths.html)
+            .pipe(gulp.dest('build/'))
+            .pipe(refresh(server));
+})
+
+gulp.task('scripts', function(){
+    gulp.src(paths.scripts)
             .pipe(gulp.dest('build/'))
             .pipe(refresh(server));
 })
 
 gulp.task('sass', function(){
-    gulp.src('src/sass/**/*.sass')
+    console.log("sass called")
+    gulp.src('app/sass/**/*.scss')
             .pipe(sass())
-            .pipe(gulp.dest('src/css/'))
+            .pipe(gulp.dest('app/css/'))
             .pipe(refresh(server));
 });
 
-gulp.task('default', ['expressServer', 'html', 'sass'], function() {
-    server.listen(35728, function (error) {
-        if (error) return console.log(error);
+gulp.task('watch', function(){
 
-        gulp.watch('src/sass/**/*.sass',['sass']);
 
-        gulp.watch('src/**/*.html', ['html']);
-    });
-});
+    gulp.watch('app/sass/**/*.scss',['sass']);
+
+    gulp.watch(paths.html, ['html']);
+
+    gulp.watch(paths.scripts, ['scripts']);
+
+})
+
+gulp.task('default', ['expressServer', 'html', 'sass', 'scripts', 'watch']);
 
 
 

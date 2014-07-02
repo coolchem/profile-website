@@ -1,0 +1,104 @@
+body {
+  margin: 0;
+  color: #2D2D2D;
+  background-color: #2D2D2D; }
+
+.application {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto; }
+
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0; }
+
+.logo {
+  width: 100%;
+  cursor: default;
+  font-size: 30px;
+  color: #ffffff;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center; }
+
+.sidebar {
+  left: 0;
+  width: 250px;
+  height: 100%;
+  position: absolute;
+  background-color: #2D2D2D; }
+  .sidebar ul {
+    padding: 0;
+    width: 100%;
+    border: none;
+    list-style: none;
+    text-align: left; }
+    .sidebar ul li {
+      padding: 0;
+      width: 100%; }
+      .sidebar ul li a {
+        cursor: pointer;
+        color: #ffffff;
+        display: block;
+        height: 72px;
+        width: 100%;
+        padding-top: 20px;
+        text-align: center;
+        font-size: 18px;
+        text-decoration: none;
+        -moz-transition: 0.4s ease-out;
+        -o-transition: 0.4s ease-out;
+        -webkit-transition: 0.4s ease-out;
+        transition: 0.4s ease-out; }
+      .sidebar ul li a:hover {
+        background-color: #009688; }
+      .sidebar ul li a.active {
+        background-color: #009688; }
+
+.sectionContainer {
+  position: absolute;
+  left: 250px;
+  right: 0px;
+  height: 100%; }
+
+.section {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  overflow: hidden;
+  background-color: #ffffff;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d; }
+
+.section.active {
+  visibility: visible;
+  z-index: 1; }
+
+.section-scaleDown {
+  -webkit-animation: scaleDown 0.7s ease both;
+  animation: scaleDown 0.7s ease both; }
+
+.section-moveFromRight {
+  -webkit-animation: moveFromRight 0.6s ease both;
+  animation: moveFromRight 0.6s ease both; }
+
+.section-ontop {
+  z-index: 999; }
+
+.sectionHeader {
+  position: absolute;
+  left: 70px;
+  color: #009688;
+  font-family: RobotoDraft;
+  font-weight: 400; }
