@@ -1,0 +1,7 @@
+{
+  "name": "profile-website",
+
+  "devDependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}
