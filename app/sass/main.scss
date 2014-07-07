@@ -1,105 +1,93 @@
 
 $borderColor: #e0e0e0;
-$backgroundColorDark: #2D2D2D;
+$backgroundColor: #ffffff;
 
-$fontColorPrimary:#2D2D2D;
-
-$fontColorGreen:#009688;
+$fontColorPrimary:#4A4A4A;
+$fontColorSecondary:#878787;
+$fontColorRed:#EE5B3F;
 
 $sidebarWidth:250px;
+
+h1,h2
+{
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+html, body, .myContainer {
+  height: 100%;
+  width: 100%;
+}
 
 body
 {
   margin: 0;
   color: $fontColorPrimary;
-  background-color: $backgroundColorDark;
+  background-color: $backgroundColor;
+  font-family: 'Open Sans', sans-serif;
 }
+
 .application{
-   width: 100%;
-   overflow-x: hidden;
-   overflow-y: auto;
-}
 
-.header{
   width: 100%;
-  height: 100px;
-  background-color: #ffffff;
-  border-bottom: 1px solid $borderColor;
 }
 
-.logo
+.myContainer {
+  position: absolute;
+  overflow: hidden;
+
+}
+
+.sectionHeaderLabel
 {
-  width:100%;
-  cursor: default;
-  font-size: 30px;
-  color: #ffffff;
-  width: 100%;
   padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
+  font-size: 25px;
+
 }
 
-.sidebar
+
+
+.menuItem
 {
-  left: 0;
-  width: $sidebarWidth;
-  height: 100%;
-  position: absolute;
-  background-color: $backgroundColorDark;
-  ul{
-    padding: 0;
+  padding: 0;
+  width: 100%;
+
+  .menuLabel{
+    letter-spacing: 2.17px;
+    cursor: pointer;
+    color: $fontColorPrimary;
+    display: block;
     width: 100%;
-    border: none;
-    list-style: none;
-    text-align: left;
+    padding-bottom: 15px;
+    font-size: 16px;
+    text-decoration: none;
+    -moz-transition: 0.4s ease-out;
+    -o-transition: 0.4s ease-out;
+    -webkit-transition: 0.4s ease-out;
+    transition: 0.4s ease-out;
 
-    li{
-      padding: 0;
-      width: 100%;
+    &:hover{
 
-      a{
-        cursor: pointer;
-        color: #ffffff;
-        display: block;
-        height: 72px;
-        width: 100%;
-        padding-top: 20px;
-        text-align: center;
-        font-size: 18px;
-        text-decoration: none;
-        -moz-transition: 0.4s ease-out;
-        -o-transition: 0.4s ease-out;
-        -webkit-transition: 0.4s ease-out;
-        transition: 0.4s ease-out;
-      }
-
-      a:hover{
-
-        background-color:#009688;
-      }
-
-      a.active{
-        background-color:#009688;
-      }
-
+      color:$fontColorRed;
     }
+
+    &.selected
+    {
+      color:$fontColorRed;
+    }
+
+
   }
+
 }
 
-.sectionContainer
-{
-  position: absolute;
-  left: $sidebarWidth;
-  right: 0px;
-  height: 100%;
-}
 
 .section
 {
   position: absolute;
   width: 100%;
-  height: 100%;
-  visibility: hidden;
+  top: 60px;
+  display: none;
   overflow: hidden;
   background-color: #ffffff;
   -webkit-backface-visibility: hidden;
@@ -112,31 +100,193 @@ body
   -moz-transform-style: preserve-3d;
   transform-style: preserve-3d;
 
+  &.section-active{
+    display: block;
+    z-index: 1;
+  }
+
 }
 
-.section-active{
-  visibility: visible;
-  z-index: 1;
-}
-
-.section.active{
-  visibility: visible;
-  z-index: 1;
-}
-
-.section-ontop {
+/*Classes for small screens*/
+.hamburger
+{
+  cursor: pointer;
+  position: absolute;
+  padding-left: 10px;
+  padding-top: 20px;
   z-index: 999;
+
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
 }
+.sidebarSmallScreen
+{
+  left: -$sidebarWidth;
+  padding-top: 10px;
+  padding-left: 70px;
+  width: $sidebarWidth;
+  height: 100%;
+  position: absolute;
+  background-color: $backgroundColor;
+  z-index:998;
+
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+
+  &.open
+  {
+    left: 0;
+  }
 
 
-.sectionHeader
+  .logo
+  {
+    cursor: default;
+    width: 100%;
+    letter-spacing: 2.17px;
+
+    h1{
+      font-size: 16px;
+      padding-bottom: 7px;
+    }
+
+    h2{
+      font-size: 12px;
+      color: $fontColorSecondary;
+    }
+  }
+
+  .menu
+  {
+    margin-top: 70px;
+    padding: 0;
+    width: 100%;
+    border: none;
+    list-style: none;
+    text-align: left;
+  }
+}
+.sectionContainerSmallScreen
 {
   position: absolute;
-  left: 70px;
-  color: $fontColorGreen;
-  font-family: RobotoDraft;
-  font-weight: 400;
+  left: 0;
+  width: 100%;
+  height:100%;
+  overflow-y:scroll;
+
+
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+
+  &.open
+  {
+    left: $sidebarWidth;
+  }
+  .sectionHeader
+  {
+    position: fixed;
+    width: 100%;
+    height: 55px;
+    letter-spacing: 2.17px;
+    border-bottom: 1px solid $borderColor;
+    background-color: $backgroundColor;
+    z-index:998;
+
+    .sectionHeaderLabel
+    {
+      width: 100%;
+      text-align: center;
+
+    }
+
+  }
 }
+
+
+/*Classes for large screens*/
+
+.sidebarLargeScreen
+{
+  left: 0;
+  padding-top: 40px;
+  padding-left: 40px;
+  width: $sidebarWidth;
+  height: 100%;
+  position: absolute;
+  background-color: $backgroundColor;
+  z-index:998;
+
+  .logo
+  {
+    cursor: default;
+    width: 100%;
+    letter-spacing: 3.17px;
+
+    h1{
+      font-size: 22px;
+      padding-bottom: 7px;
+    }
+
+    h2{
+      font-size: 18px;
+      color: $fontColorSecondary;
+    }
+  }
+
+  .menu
+  {
+    margin-top: 70px;
+    padding: 0;
+    width: 100%;
+    border: none;
+    list-style: none;
+    text-align: left;
+  }
+}
+.sectionContainerLargeScreen
+{
+  position: absolute;
+  left: $sidebarWidth;
+  right: 0;
+  height:100%;
+  overflow-y:scroll;
+
+  .sectionHeader
+  {
+    width: 100%;
+    padding-top: 40px;
+    letter-spacing: 2.17px;
+    background-color: $backgroundColor;
+    z-index:998;
+
+    .sectionHeaderLabel
+    {
+      font-size: 32px;
+      padding-top: 0;
+      margin-top: -5px;
+      width: 100%;
+      text-align: left;
+    }
+
+  }
+
+  .section
+  {
+    top: 80px;
+  }
+
+}
+
+
 
 /********************************* animations **************************************/
 

@@ -1,32 +1,14 @@
 <div>
-    <states>
-        <state name="home"></state>
-        <state name="mywork"></state>
-        <state name="resume"></state>
-    </states>
 
-    <div id="sidebar" class="sidebar">
-        <div class="logo">Randi Boyd</div>
-        <ul id="sidebarMenu">
-            <li><a id="aboutMeLink" class.home="active">About Me</a></li>
-            <li><a id="myWorkLink" class.mywork="active">My Work</a></li>
-            <li><a id="myResumeLink" class.resume="active">Resume</a></li>
-        </ul>
-    </div>
-    <div class="sectionContainer">
-
-        <div id="homeSection" class="section"  header_text="About Me"  comp="app.Section">
-
+    <div class="sidebarLargeScreen">
+        <div class="logo">
+            <h1>Randi Boyd</h1>
+            <h2>UX Engineer</h2>
         </div>
-        <div id="portfolioSection" class="section" header_text="My Works"  comp="app.Section">
-
-        </div>
-        <div id="resumeSection" class="section" header_text="My Resume" comp="app.Section">
-
-        </div>
-
+        <ul id="mainMenu" comp="List" class="menu" item_renderer="app.MenuItemRenderer"></ul>
     </div>
 
+    <div id="sectionContainer" comp="app.SectionContainer" class="sectionContainerLargeScreen"
+         skin_class="app.SectionContainerSkin"></div>
 
-<!--    <div id="homeSection" class="homeSection"></div>-->
 </div>

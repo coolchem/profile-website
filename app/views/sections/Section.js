@@ -1,4 +1,4 @@
-$r.package("app").Class("Section").extends("Container")(function(){
+$r.package("app").Class("Section").extends("Component")(function(){
 
     this.skinClass = "app.SectionSkin";
     var _headerText = "";
