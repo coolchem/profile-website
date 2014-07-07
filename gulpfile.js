@@ -1,41 +1,27 @@
 var gulp    = require('gulp'),
         sass = require('gulp-sass'),
-        express = require('express'),
-        refresh = require('gulp-livereload'),
-        server  = require('tiny-lr')();
+        connect= require('gulp-connect'),
+        clean = require('gulp-clean');;
 
 var paths = {
-    scripts:['app/**/*.js'],
-    css:['app/**/*.css'],
-    json:['app/**/*.json'],
+    bowerComponents:['app/bower_components/*/dist/**/*','app/bower_components/*fontawesome/**/*'],
+    scripts:['app/**/*.js', '!app/bower_components/**/*.js'],
+    css:['app/css/**/*.css'],
+    images:['app/images/**/*.jpg', 'app/images/**/*.jpg'],
     html:['app/**/*.html'],
 };
 
-gulp.task('expressServer', function(){
-    app = express();
-    app.use(require('connect-livereload')());
-    app.use(express.static(__dirname));
-    app.listen(4000);
+gulp.task('connect', function(){
+    connect.server({
+        port: 4000
+    });
 });
-
-gulp.task('html', function(){
-    gulp.src(paths.html)
-            .pipe(gulp.dest('build/'))
-            .pipe(refresh(server));
-})
-
-gulp.task('scripts', function(){
-    gulp.src(paths.scripts)
-            .pipe(gulp.dest('build/'))
-            .pipe(refresh(server));
-})
 
 gulp.task('sass', function(){
     console.log("sass called")
     gulp.src('app/sass/**/*.scss')
             .pipe(sass())
-            .pipe(gulp.dest('app/css/'))
-            .pipe(refresh(server));
+            .pipe(gulp.dest('app/css/'));
 });
 
 gulp.task('watch', function(){
@@ -43,13 +29,51 @@ gulp.task('watch', function(){
 
     gulp.watch('app/sass/**/*.scss',['sass']);
 
-    gulp.watch(paths.html, ['html']);
+})
 
-    gulp.watch(paths.scripts, ['scripts']);
+
+
+
+gulp.task('bowerComponents', function(){
+    gulp.src(paths.bowerComponents)
+            .pipe(gulp.dest('build/bower_components'));
+})
+
+gulp.task('scripts', function(){
+    gulp.src(paths.scripts)
+            .pipe(gulp.dest('build/'));
+})
+
+gulp.task('html', function(){
+    gulp.src(paths.html)
+            .pipe(gulp.dest('build/'));
+})
+
+gulp.task('css', function(){
+    gulp.src(paths.css)
+            .pipe(gulp.dest('build/css'));
+})
+
+gulp.task('images', function(){
+    gulp.src(paths.images)
+            .pipe(gulp.dest('build/images'));
+})
+
+gulp.task('clean', function(){
+
+    gulp.src('build/', {read: false})
+            .pipe(clean());
 
 })
 
-gulp.task('default', ['expressServer', 'html', 'sass', 'scripts', 'watch']);
+gulp.task('pushToGitubIO', function () {
+    return gulp.src("build/**/*")
+            .pipe(gulp.dest('../reboyd.github.io/'));
+});
+
+gulp.task('default', ['connect', 'watch']);
+
+gulp.task('build', ['scripts', 'css', 'html', 'bowerComponents', 'images']);
 
 
 

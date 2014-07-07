@@ -1,235 +1,161 @@
 
+//skins for small Screens
+$r.package("app").skins(
+
+        {skinClass:'AppSkinSmall', skinURL:"appSkinSmall.html"},
+        {skinClass:'SectionContainerSkinSmall', skinURL:"views/base/sectionContainerSkinSmall.html"}
+)
 
 $r.package("app").skins(
 
         {skinClass:'AppSkin', skinURL:"appSkin.html"},
-        {skinClass:'SectionSkin', skinURL:"views/sectionSkin.html"}
+        {skinClass:'MenuItemRendererSkin', skinURL:"views/base/menuItemRendererSkin.html"},
+        {skinClass:'SectionContainerSkin', skinURL:"views/base/sectionContainerSkin.html"},
+        {skinClass:'AboutMeSectionSkin', skinURL:"views/sections/aboutMeSectionSkin.html"},
+        {skinClass:'MyWorkSectionSkin', skinURL:"views/sections/myWorkSectionSkin.html"},
+        {skinClass:'ResumeSectionSkin', skinURL:"views/sections/resumeSectionSkin.html"}
 )
 
-//skin states supported are
-// "home" "mywork" "resume"
 $r.Application("profileWebsite", function(){
 
-    var animEndEventNames = {
-                'WebkitAnimation' : 'webkitAnimationEnd',
-                'OAnimation' : 'oAnimationEnd',
-                'msAnimation' : 'MSAnimationEnd',
-                'animation' : 'animationend'
-            },
-    // animation end event name
-            animEndEventName = animEndEventNames[ Modernizr.prefixed( 'animation' ) ]
+    var menuDataProvider= [{state:'aboutme',label:'About Me', hash:"#aboutme"},
+        {state:'mywork',label:'My Work', hash:"#mywork"},
+        {state:'resume',label:'Resume', hash:"#resume"}]
+
+    var isTouchDevice = $r.supportsTouch;
 
     //binding functions so the have this as context
-    var handleMenuItemClicked = this.bind(handleMenuItemClickedFn);
-    var setCurrentState = this.bind(setCurrentStateFn);
-    var setCurrentSection = this.bind(setCurrentSectionFn);
-    var getSectionBasedOnState = this.bind(getSectionBasedOnStateFn)
+    var handleMenuSelectionChanged = this.bind(handleMenuSelectionChangedFn),
+            handleHamburgerClicked = this.bind(handleHamburgerClickedFn),
+            handleResize = this.bind(handleResizeFn),
+            toggleOpenState = this.bind(toggleOpenStateFn),
+            handleSectionContainerClicked = this.bind(handleSectionContainerClickedFn)
 
-    var currentSection = null;
+    this.mainMenu = null;
+    this.sectionContainer = null;
+    this.hamburger = null;
+
+    this.skinParts = [{id:"mainMenu", required:false},
+        {id:"sectionContainer", required:false},
+        {id:"hamburger", required:false}];
+
+
+    var _selectedMenuItem = null;
 
     this.init = function(){
 
         this.super.init();
-        this.skinClass = "app.AppSkin";
-        setCurrentState(location.hash);
+        this.skinClass = "";
+
+        window.addEventListener("resize", handleResize);
+
+        _selectedMenuItem = getSelectedMenuItemBasedOnHash(window.location.hash);
+
+        if(_selectedMenuItem === null)
+        {
+            _selectedMenuItem = menuDataProvider[0];
+        }
+
 
     }
-
-    /*This function is called when the component is fully created.
-      Which means all the nodes have been initialized  for the document
-
-      thus calling here to setup visibilty on the first section
-    */
 
     this.initialize = function(){
         this.super.initialize();
-        window.onhashchange = this.bind(locationHashChanged, this);
-
-        //setting up the inital active section;
-        setCurrentSectionFn(null, this.currentState);
+        var event = new $r.Event("resize");
+        window.dispatchEvent(event.getEventObject());
 
     }
 
-    //links
-    this.aboutMeLink = null;
-    this.myWorkLink = null;
-    this.myResumeLink = null;
-
-    this.homeSection = null;
-    this.portfolioSection = null;
-    this.resumeSection = null;
-
-    this.skinParts = [{id:"aboutMeLink", required:true},
-        {id:"myWorkLink", required:true},
-        {id:"myResumeLink", required:true},
-
-        {id:"homeSection", required:true},
-        {id:"portfolioSection", required:true},
-        {id:"resumeSection", required:true}];
 
     this.partAdded = function(partName, instance){
         this.super.partAdded(partName,instance)
 
-        if(instance === this.aboutMeLink || instance === this.myWorkLink || instance === this.myResumeLink)
-            instance.addEventListener("click", handleMenuItemClicked);
-
-        if(instance === this.homeSection || instance === this.portfolioSection || instance === this.resumeSection)
-            instance.addEventListener(animEndEventName, handleSectionAnimationEnd, false);
-
-    }
-
-    var oldSection
-    var newSection
-    var endOldSection = false,
-            endNewSection = false;
-    function handleSectionAnimationEnd(event){
-
-        if(oldSection && newSection)
+        if(instance === this.mainMenu)
         {
-            if(event.target === oldSection[0])
-                endOldSection = true;
-            if(event.target === newSection[0])
-                endNewSection = true;
+            this.mainMenu.dataProvider = new $r.Collection(menuDataProvider);
+            this.mainMenu.selectedItem = _selectedMenuItem
+            this.mainMenu.addEventListener($r.IndexChangeEvent.CHANGE, handleMenuSelectionChanged);
+        }
 
-            if( endNewSection &&  endNewSection) {
-                onEndAnimation( oldSection, newSection );
+        if(instance === this.sectionContainer)
+        {
+            this.sectionContainer.menuDataProvider = new $r.Collection(menuDataProvider);
+            this.sectionContainer.selectedMenuItem = _selectedMenuItem;
+            if(isTouchDevice)
+                this.sectionContainer.addEventListener("touchstart", handleSectionContainerClicked)
+            else
+                this.sectionContainer.addEventListener("click", handleSectionContainerClicked)
+        }
+
+        if(instance === this.hamburger)
+        {
+            if(isTouchDevice)
+            {
+                this.hamburger.addEventListener("touchstart", handleHamburgerClicked)
             }
+            else
+               this.hamburger.addEventListener("click", handleHamburgerClicked)
         }
+
 
     }
 
+    function handleSectionContainerClickedFn(event){
 
-    function onEndAnimation( _oldSection, _newSection ) {
-        endOldSection = false;
-        endNewSection = false;
-        oldSection = null;
-        newSection = null;
-
-        resetSectionClasses( _oldSection, _newSection )
+        this.currentState = "";
     }
 
-
-    function handleMenuItemClickedFn(event){
-
-        if(event.target === this.aboutMeLink[0])
+    function handleResizeFn(event){
+        if(this[0].offsetWidth <= 1024)
         {
-            window.location.hash = "#aboutme";
-
-        }
-        else if(event.target === this.myWorkLink[0])
-        {
-            window.location.hash = "#mywork";
+            this.skinClass = "app.AppSkinSmall";
         }
         else
         {
-            window.location.hash = "#myresume";
+            this.skinClass = "app.AppSkin";
         }
-
-        setCurrentState(window.location.hash);
     }
 
-    function locationHashChanged() {
+    function handleHamburgerClickedFn(event){
 
-        console.log("humm  how many times do i get called");
+        toggleOpenState();
+
     }
+    function handleMenuSelectionChangedFn(event){
 
-    function setCurrentStateFn(hash)
-    {
-        var oldState = this.currentState;
-        switch (hash) {
-            case '#aboutme':
-            {
-                this.currentState = "home";
-                break;
-            }
+        _selectedMenuItem = this.mainMenu.selectedItem;
+        this.sectionContainer.selectedMenuItem = _selectedMenuItem;
 
-            case "#mywork":
-            {
-                this.currentState = "mywork";
-                break;
-            }
-
-            case "#myresume":
-            {
-
-                this.currentState = "resume";
-                break;
-            }
-            default:
-            {
-                window.location.hash = "#aboutme"
-                this.currentState = "home"
-                break;
-            }
-        }
-
-        setCurrentSection(oldState, this.currentState)
-    }
-
-    function setCurrentSectionFn(oldState, newState)
-    {
-
-         oldSection =  getSectionBasedOnState(oldState)
-         newSection =  getSectionBasedOnState(newState)
-
-
-         if(oldSection && newSection)
-         {
-
-             newSection.addClass('section-active');
-             var outClass = 'section-scaleDown';
-             var inClass = 'section-moveFromRight section-ontop';
-
-             oldSection.addClass(outClass);
-             newSection.addClass(inClass);
-         }
-         else if(newSection)
-         {
-             newSection.addClass('section-active');
-         }
-
-
-        function handleOldSectionAnimationEnd(event) {
-            event.stopImmediatePropagation();
-            oldSection.removeEventListener(animEndEventName, handleOldSectionAnimationEnd, false);
-
-        }
-
-        function handleNewSectionAnimationEnd(event) {
-            event.stopImmediatePropagation();
-            newSection.removeEventListener( animEndEventName, handleNewSectionAnimationEnd, false);
-            endNewSection = true;
-            if( endOldSection ) {
-                onEndAnimation( oldSection, newSection );
-            }
+        if(this.hasState("sidebaropen") && this.currentState == "sidebaropen")
+        {
+            this.currentState = "";
         }
 
     }
 
-    function resetSectionClasses( oldSection, newSection) {
-        oldSection.class = "section"
-        newSection.class = 'section section-active';
+    function toggleOpenStateFn(){
+
+
+        if(this.hasState("sidebaropen"))
+        {
+            if(this.currentState === "sidebaropen")
+                this.currentState = "";
+            else
+                this.currentState = "sidebaropen"
+        }
     }
 
-    function getSectionBasedOnStateFn(state){
+    function getSelectedMenuItemBasedOnHash(hash){
 
-        switch (state) {
-            case 'home':
+        for(var i=0; i< menuDataProvider.length; i++)
+        {
+            if(menuDataProvider[i].hash === hash)
             {
-                return this.homeSection;
-            }
-
-            case "mywork":
-            {
-                return this.portfolioSection;
-            }
-
-            case "resume":
-            {
-                return this.resumeSection;
+                return menuDataProvider[i];
             }
         }
 
+        return null;
     }
 
 })

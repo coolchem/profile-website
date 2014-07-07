@@ -46,7 +46,9 @@ body {
 
 .section {
   position: absolute;
-  width: 100%;
+  left: 0px;
+  right: 20px;
+  max-width: 1280px;
   top: 60px;
   display: none;
   overflow: hidden;
@@ -64,6 +66,29 @@ body {
     display: block;
     z-index: 1; }
 
+.introGroup {
+  position: relative;
+  padding-top: 50px;
+  padding-bottom: 50px; }
+  .introGroup .myPhoto {
+    float: left;
+    margin-left: 5px;
+    margin-right: 20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px; }
+  .introGroup span {
+    position: relative;
+    top: 10px; }
+
+.subSection {
+  padding-top: 30px; }
+  .subSection h1 {
+    font-size: 20px;
+    padding-bottom: 15px; }
+
 /*Classes for small screens*/
 .hamburger {
   cursor: pointer;
@@ -79,7 +104,7 @@ body {
 
 .sidebarSmallScreen {
   left: -250px;
-  padding-top: 10px;
+  padding-top: 15px;
   padding-left: 70px;
   width: 250px;
   height: 100%;
@@ -124,6 +149,8 @@ body {
   transition: all 0.3s; }
   .sectionContainerSmallScreen.open {
     left: 250px; }
+  .sectionContainerSmallScreen .section {
+    left: 20px; }
   .sectionContainerSmallScreen .sectionHeader {
     position: fixed;
     width: 100%;
